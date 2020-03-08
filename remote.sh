@@ -25,20 +25,29 @@ function get_code() {
 
 function cmd_for_key() {
   case $1 in
+    "0" | "1" | "2" | "3" | "4" | "5" | "7" | "8" | "9" )
+      echo "Num$1" ;;
     "w" ) echo "Up" ;;
     "a" ) echo "Left" ;;
     "s" ) echo "Down" ;;
     "d" ) echo "Right" ;;
     "." ) echo "Confirm" ;;
+    " " ) echo "Pause" ;;
+    "\r" ) echo "Enter" ;;
     "i" ) echo "Input" ;;
     "m" ) echo "Mute" ;;
+    "h" ) echo "Home" ;;
     "n" ) echo "Netflix" ;;
     "y" ) echo "Youtube" ;;
+    "G" ) echo "GooglePlay" ;;
+    "A" ) echo "ApplicationLauncher" ;;
+    "t" ) echo "Tv" ;;
     "+" | "=" ) echo "VolumeUp" ;;
     "-" | "_" ) echo "VolumeDown" ;;
     "<" ) echo "ChannelUp" ;;
     ">" ) echo "ChannelDown" ;;
     "g" ) echo "GGuide" ;;
+    "O" ) echo "TvPower" ;;
     esac
 }
 
