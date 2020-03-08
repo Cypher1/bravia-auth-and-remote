@@ -13,7 +13,7 @@ cmd="<?xml version=\"1.0\"?><s:Envelope xmlns:s=\"http://schemas.xmlsoap.org/soa
 code=$(curl -w "%{http_code}" --silent -XPOST http://$1/sony/IRCC -d "$cmd" -H 'Content-Type: text/xml; charset=UTF-8' -H 'SOAPACTION: "urn:schemas-sony-com:service:IRCC:1#X_SendIRCC"' -H "X-Auth-PSK: 0000" -o /dev/null )
 
 if [ "$code" = "200" ]; then
-  echo "✓"
+  exit 0
 else
   echo "Command failed (HTTP_CODE: $code, try running it in a console)"
   exit 1

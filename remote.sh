@@ -2,12 +2,11 @@
 set -e
 
 function get_key() {
-  echo "Press any key to continue" >> /dev/stderr
   while [ true ] ; do
-  read -n 1 -r KEY
-  if [ $? = 0 ] ; then
-  break ;
-  fi
+    read -rsn 1 KEY
+    if [ $? = 0 ] ; then
+      break ;
+    fi
   done
   echo $KEY
 }
@@ -17,7 +16,7 @@ function get_code() {
   CODE=$(echo "$CMDS" | grep -A1 "\"$CMD\"" | tail -n 1 | sed "s/.*\"\(.*\)\"$/\1/")
 
   if [ "$CODE" = "" ]; then
-    echo "COULDN'T FIND COMMAND $CMD" >> /dev/stderr
+    echo "COULDN'T FIND COMMAND $CMD" > /dev/stderr
     exit 1
   fi
   echo $CODE
@@ -52,7 +51,7 @@ function cmd_for_key() {
 }
 
 if [ "$1" = "" ]; then
-  echo "Usage: $0 <TV_IP>" >> /dev/stderr
+  echo "Usage: $0 <TV_IP>" > /dev/stderr
   exit 1
 fi
 
@@ -62,5 +61,6 @@ CMDS=$(./print_ircc_codes.sh $IP)
 while [ true ] ; do
   CMD=$(cmd_for_key $(get_key))
   CODE=$(get_code $CMD)
-  ./send_command.sh $IP $CODE
+  echo "Sending $CMD" > /dev/stderr
+  ./send_command.sh $IP $CODE &
 done
