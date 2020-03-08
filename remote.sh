@@ -16,12 +16,11 @@ function get_code() {
   CMD=$1
   CODE=$(echo "$CMDS" | grep -A1 "\"$CMD\"" | tail -n 1 | sed "s/.*\"\(.*\)\"$/\1/")
 
-  echo $CODE
-
   if [ "$CODE" = "" ]; then
     echo "COULDN'T FIND COMMAND $CMD" >> /dev/stderr
     exit 1
   fi
+  echo $CODE
 }
 
 function cmd_for_key() {
