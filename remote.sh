@@ -37,7 +37,7 @@ function cmd_for_key() {
     "m" ) echo "Mute" ;;
     "h" ) echo "Home" ;;
     "n" ) echo "Netflix" ;;
-    "y" ) echo "Youtube" ;;
+    "y" ) echo "YouTube" ;;
     "G" ) echo "GooglePlay" ;;
     "A" ) echo "ApplicationLauncher" ;;
     "t" ) echo "Tv" ;;
