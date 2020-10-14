@@ -24,8 +24,7 @@ function get_code() {
 
 function cmd_for_key() {
   case $1 in
-    "0" | "1" | "2" | "3" | "4" | "5" | "7" | "8" | "9" )
-      echo "Num$1" ;;
+    "0" | "1" | "2" | "3" | "4" | "5" | "7" | "8" | "9" ) echo "Num$1" ;;
     "w" ) echo "Up" ;;
     "a" ) echo "Left" ;;
     "s" ) echo "Down" ;;
@@ -60,7 +59,17 @@ CMDS=$(./print_ircc_codes.sh $IP)
 
 while [ true ] ; do
   CMD=$(cmd_for_key $(get_key))
-  CODE=$(get_code $CMD)
-  echo "Sending $CMD" > /dev/stderr
-  ./send_command.sh $IP $CODE &
+  if [ "$CMD" = "" ]; then
+    cat $0 | grep "echo.*;;" \
+    | grep -v "grep" \
+    | sed "s/\"//g" \
+    | sed "s/ //g" \
+    | sed "s/|//g" \
+    | sed "s/;;//g" \
+    | sed "s/)echo/ - /g"
+  else
+    CODE=$(get_code $CMD)
+    echo "Sending $CMD" > /dev/stderr
+    ./send_command.sh $IP $CODE &
+  fi
 done
