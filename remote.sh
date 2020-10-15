@@ -32,6 +32,7 @@ function cmd_for_key() {
     "." ) echo "Confirm" ;;
     " " ) echo "Pause" ;;
     "\r" ) echo "Enter" ;;
+    "b" ) echo "Return" ;;
     "i" ) echo "Input" ;;
     "m" ) echo "Mute" ;;
     "h" ) echo "Home" ;;
@@ -50,26 +51,34 @@ function cmd_for_key() {
 }
 
 if [ "$1" = "" ]; then
-  echo "Usage: $0 <TV_IP>" > /dev/stderr
+  echo "Usage: $0 <TV_IP> [COMMAND]" > /dev/stderr
   exit 1
 fi
 
 IP=$1
 CMDS=$(./print_ircc_codes.sh $IP)
 
-while [ true ] ; do
-  CMD=$(cmd_for_key $(get_key))
-  if [ "$CMD" = "" ]; then
-    cat $0 | grep "echo.*;;" \
-    | grep -v "grep" \
-    | sed "s/\"//g" \
-    | sed "s/ //g" \
-    | sed "s/|//g" \
-    | sed "s/;;//g" \
-    | sed "s/)echo/ - /g"
-  else
-    CODE=$(get_code $CMD)
-    echo "Sending $CMD" > /dev/stderr
-    ./send_command.sh $IP $CODE &
-  fi
-done
+if [ "$2" = "" ]; then
+  while [ true ] ; do
+    CMD=$(cmd_for_key $(get_key))
+    if [ "$CMD" = "" ]; then
+      cat $0 | grep "echo.*;;" \
+      | grep -v "grep" \
+      | sed "s/\"//g" \
+      | sed "s/ //g" \
+      | sed "s/|//g" \
+      | sed "s/;;//g" \
+      | sed "s/)echo/ - /g"
+    else
+      CODE=$(get_code $CMD)
+      echo "Sending $CMD" > /dev/stderr
+      ./send_command.sh $IP $CODE &
+    fi
+  done
+else
+  CMD=$2
+  CODE=$(get_code $CMD)
+  echo "Sending $CMD" > /dev/stderr
+  ./send_command.sh $IP $CODE &
+  exit 1
+fi
